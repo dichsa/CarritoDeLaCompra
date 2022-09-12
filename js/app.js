@@ -1,9 +1,9 @@
 //Variables
 
 const carrito = document.querySelector('#carrito');
-const listaCursos = document.querySelector('#lista-carrito');
+const listaCursos = document.querySelector('#lista-cursos');
 const contenedorCarrito = document.querySelector('#lista-carrito tbody');
-const vaciarCarritoBin = document.querySelector('#vaciar-carrito');
+const vaciarCarritoBtn = document.querySelector('#vaciar-carrito');
 let articulosCarrito = [];
 
 //Listeners
@@ -11,14 +11,17 @@ cargarEventListeners();
 
 function cargarEventListeners() {
     
-    listaCursos.addEventListener(click, agregarCurso);
+    listaCursos.addEventListener('click', agregarCurso);
 
-    carrito.addEventListener(click, eliminarCurso);
+    carrito.addEventListener('click', eliminarCurso);
 
-    vaciarCarritoBtn.addEventListener(click, vaciarCarrito);
+    vaciarCarritoBtn.addEventListener('click', vaciarCarrito);
 
 }
 
+//Funciones
+
+//Funcion que añade el curso al carrito
 function agregarCurso(e) {
 
     e.preventDefault();
@@ -59,7 +62,20 @@ function leerDatosCurso(curso) {
 
 }
 
-function carritoHTML(){
+function eliminarCurso(e) {
+    e.preventDefault();
+    if(e.target.classList.contains('borrar-curso') ) {
+         // e.target.parentElement.parentElement.remove();
+         const cursoId = e.target.getAttribute('data-id')
+         
+         // Eliminar del arreglo del carrito
+         articulosCarrito = articulosCarrito.filter(curso => curso.id !== cursoId);
+
+         carritoHTML();
+    }
+}
+
+function carritoHTML() {
 
     vaciarCarrito();
 
@@ -73,9 +89,16 @@ function carritoHTML(){
         <td>${curso.precio}</td>
         <td>${curso.cantidad}</td>
         <td>
-            <a href="#" class=@borrar-curso" data-id="${curso.id}">X</a>
+            <a href="#" class="borrar-curso" data-id="${curso.id}">X</a>
         </td>
         `;
         contenedorCarrito.appendChild(row);
-    })
+    });
 }
+
+function vaciarCarrito(){
+    while(contenedorCarrito.firstChild){
+        contenedorCarrito.removeChild(contenedorCarrito.firstChild);
+    }
+}
+
